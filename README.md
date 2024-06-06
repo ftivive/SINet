@@ -7,7 +7,9 @@ We present a new deep learning model for crowd counting and introduce a novel pr
 **Fig. 1.** SINet architecture with different network components for crowd density map estimation.
 
 
-### Train and test
+
+
+## Train and test
 1. To train a SINet network, run the following command:
 
 **Example 1:** `python train.py`
@@ -15,6 +17,8 @@ We present a new deep learning model for crowd counting and introduce a novel pr
 2. To test a pretrained SINet network, run the following command:
 
 **Example 1:** `python test.py --input images/test_image.jpg --output images/test_image-output.jpg`
+
+
 
 
 ## Results on ShanghaiTech dataset
