@@ -1,0 +1,12 @@
+train_params:
+  dataset_dir: './data'  
+  dataset: 'SHA'  
+  batch_size: 5
+  num_epochs: 2000
+  num_workers: 4
+  lr_start: 0.0001
+  image_size: 384
+  number_gradient_accumulation: 4
+
+
+
