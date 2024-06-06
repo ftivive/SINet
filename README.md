@@ -7,6 +7,15 @@ We present a new deep learning model for crowd counting and introduce a novel pr
 **Fig. 1.** SINet architecture with different network components for crowd density map estimation.
 
 
+## Installation
+1. Install 
+
+2. git clone https://github.com/ftivive/SINet/
+
+3. Install dependencies: `pip install -r requirements.txt`
+
+
+
 
 
 ## Train and test
