@@ -1,15 +1,9 @@
-# -*- coding: utf-8 -*-
-"""
-
-@author: tivive
-"""
-
 import torch
 from torch import nn
-from model.decoder_module import Decoder
-from utils.utils import BaseConv, BaseSIConv
+from model.conv_fcn import BaseConv, BaseSIConv
+from model.dec_module import Decoder
 
-# Shunting inhibitory network
+
 class SINet(nn.Module):
     def __init__(self, in_fs, num_ouputs):
         super(SINet, self).__init__()        
@@ -34,10 +28,10 @@ class SINet(nn.Module):
         dmp_out = self.dmp(input, amp_out)      
         return dmp_out, amp_out
 
-# Dense shunting inhibitory convolutional block (DSIC-BK)
-class DSIC_BK(nn.Module):
+
+class Enc_Blk(nn.Module):
     def __init__(self, in_chs, out_chs):
-        super(DSIC_BK, self).__init__()
+        super(Enc_Blk, self).__init__()
         sub_chs  = out_chs // 4
         self.cv0 = BaseSIConv(in_chs,      sub_chs, 1, 1, 0, 1, activation = None,                  use_bn = True)
         self.cv1 = BaseSIConv(in_chs,      sub_chs, 3, 1, 1, 1, activation = None,                  use_bn = True)
@@ -55,15 +49,14 @@ class DSIC_BK(nn.Module):
         x3_raw = self.cv3(torch.cat([x0_raw, x1_raw, x2_raw], 1))
         #  8                           1         1       2      4
         return   self.cv4(torch.cat([x0_raw, x1_raw, x2_raw, x3_raw], 1))         
-    
-# Feature extraction encoder (FEE)
+
 class FEN(nn.Module):
     def __init__(self, in_chs, in_fs):
         super(FEN, self).__init__()
-        self.Enconv1 = nn.Sequential(DSIC_BK(3,         in_fs), nn.MaxPool2d(2, 2))
-        self.Enconv2 = nn.Sequential(ENC_BK(in_fs,   2*in_fs), nn.MaxPool2d(2, 2))
-        self.Enconv3 = nn.Sequential(ENC_BK(2*in_fs, 4*in_fs), nn.MaxPool2d(2, 2))
-        self.Enconv4 = nn.Sequential(ENC_BK(4*in_fs, 8*in_fs), nn.MaxPool2d(2, 2))
+        self.Enconv1 = nn.Sequential(Enc_Blk(3,         in_fs), nn.MaxPool2d(2, 2))
+        self.Enconv2 = nn.Sequential(MixConv(in_fs,   2*in_fs), nn.MaxPool2d(2, 2))
+        self.Enconv3 = nn.Sequential(MixConv(2*in_fs, 4*in_fs), nn.MaxPool2d(2, 2))
+        self.Enconv4 = nn.Sequential(MixConv(4*in_fs, 8*in_fs), nn.MaxPool2d(2, 2))
         self.Enconv5 = nn.Sequential(BaseConv(15*in_fs, 16*in_fs, 3, 1, 1, 1, activation = nn.ReLU(inplace=True), use_bn = True), nn.MaxPool2d(2, 2))  
         #
         self.dp0     = nn.AvgPool2d(8, 8) 
@@ -79,7 +72,7 @@ class FEN(nn.Module):
         input    = self.Enconv5(torch.cat([dnout4_2, self.dp2(dnout3_2), self.dp1(dnout2_2), self.dp0(dnout1_2)],1))    
         return [dnout2_2, dnout3_2, dnout4_2, input]
     
-# Segmentation decoder
+
 class Att_Decoder(nn.Module):
     def __init__(self, in_fs, outputs):
         super(Att_Decoder, self).__init__()        
@@ -96,7 +89,7 @@ class Att_Decoder(nn.Module):
         out2             = self.att_2(out2)
         return [out0, out1, out2]
 
-# Weight fusion strategy
+
 class weighted_fusion(nn.Module):
     def __init__(self, channels):
         super(weighted_fusion, self).__init__()
@@ -109,7 +102,6 @@ class weighted_fusion(nn.Module):
         return nn.functional.softmax(y, dim=1)
 
 
-# Density map estimation decoder (DME)
 class Dmp_Decoder(nn.Module):
     def __init__(self, in_fs, outputs):
         super(Dmp_Decoder, self).__init__()        
@@ -118,38 +110,39 @@ class Dmp_Decoder(nn.Module):
         self.conv_F2  = BaseConv(8*in_fs, 8*in_fs, 3, 1, 1, 1, activation = nn.ReLU(inplace=True), use_bn = True)    
         self.conv_F3  = BaseConv(8*in_fs, 8*in_fs, 3, 1, 1, 1, activation = nn.ReLU(inplace=True), use_bn = True)    
         #        
-        self.out_O1   = nn.Sequential(BaseConv(8*in_fs, 8*in_fs, 3, 1, 1, 1, activation = nn.ReLU6(inplace = True), use_bn = True), 
+        self.out_O1   = nn.Sequential(BaseConv(8*in_fs, 8*in_fs, 3, 1, 1, 1, activation =  nn.ReLU(inplace = True), use_bn = True), 
                                       BaseConv(8*in_fs, outputs, 1, 1, 0, 1, activation = nn.ReLU6(inplace = True), use_bn = False))
 
-        self.out_O2   = nn.Sequential(BaseConv(8*in_fs, 8*in_fs, 3, 1, 1, 1, activation = nn.ReLU6(inplace = True), use_bn = True),
+        self.out_O2   = nn.Sequential(BaseConv(8*in_fs, 8*in_fs, 3, 1, 1, 1, activation =  nn.ReLU(inplace = True), use_bn = True),
                                       BaseConv(8*in_fs, outputs, 1, 1, 0, 1, activation = nn.ReLU6(inplace = True), use_bn = False))
 
-        self.out_O3   = nn.Sequential(BaseConv(8*in_fs, 8*in_fs, 3, 1, 1, 1, activation = nn.ReLU6(inplace = True), use_bn = True),
+        self.out_O3   = nn.Sequential(BaseConv(8*in_fs, 8*in_fs, 3, 1, 1, 1, activation =  nn.ReLU(inplace = True), use_bn = True),
                                       BaseConv(8*in_fs, outputs, 1, 1, 0, 1, activation = nn.ReLU6(inplace = True), use_bn = False))
 
         self.weights  = weighted_fusion(3)
         #   
 
     def forward(self, input, att_map):   		        
-        output = self.decoder(input, att_map)                
+        output    = self.decoder(input, att_map)                
+
+        output    = self.conv_F1(output)
+        dmp_LR    =  self.out_O1(output) 
+
+        output    = self.conv_F2(output)
+        dmp_MR    =  self.out_O2(output) 
+
+        output    = self.conv_F3(output)
+        dmp_HR    =  self.out_O3(output)
         #
-        output = self.conv_F1(output)
-        dmp_LR = self.out_O1(output)
-        #
-        output = self.conv_F2(output)
-        dmp_MR = self.out_O2(output)
-        #
-        output = self.conv_F3(output)
-        dmp_HR = self.out_O3(output)
-        #
-        weight = self.weights(torch.cat([dmp_HR, dmp_MR, dmp_LR],1))
-        dmp_HR = weight[:,0].unsqueeze(1).unsqueeze(2).unsqueeze(3) * dmp_HR + weight[:,1].unsqueeze(1).unsqueeze(2).unsqueeze(3) * dmp_MR + weight[:,2].unsqueeze(1).unsqueeze(2).unsqueeze(3) * dmp_LR 
+        weight    = self.weights(torch.cat([dmp_HR, dmp_MR, dmp_LR],1))
+
+        dmp_HR    = weight[:,0].unsqueeze(1).unsqueeze(2).unsqueeze(3) * dmp_HR + weight[:,1].unsqueeze(1).unsqueeze(2).unsqueeze(3) * dmp_MR + weight[:,2].unsqueeze(1).unsqueeze(2).unsqueeze(3) * dmp_LR 
+        
         return [dmp_HR, dmp_MR, dmp_LR]
 
-# Encoder block (ENC-BK)
-class ENC_BK(nn.Module):
+class MixConv(nn.Module):
     def __init__(self, in_channels, out_channels):
-        super(ENC_BK, self).__init__()
+        super(MixConv, self).__init__()
         self.conv1A = nn.Sequential(BaseConv(in_channels,  out_channels, 1, 1, 0, 1,   activation = nn.ReLU(inplace = True), use_bn = True),
                                     BaseSIConv(out_channels, out_channels, 3, 1, 1, 1, activation = nn.ReLU(inplace = True), use_bn = True))  
 
@@ -160,3 +153,4 @@ class ENC_BK(nn.Module):
          
     def forward(self, input):
         return self.conv1C(torch.cat([self.conv1A(input), self.conv1B(input)], 1)) 
+ 

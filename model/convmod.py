@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from timm.models.layers import DropPath
 
 
@@ -29,7 +30,7 @@ class ConvMod(nn.Module):
         self.norm = nn.BatchNorm2d(dim)	
         self.a    = nn.Sequential(nn.Conv2d(dim, dim, 1),
                                   nn.ReLU(inplace = True),
-                                  nn.Conv2d(dim, dim, 5, padding=2, groups=dim))
+                                  nn.Conv2d(dim, dim, 11, padding=5, groups=dim))
         self.v    = nn.Conv2d(dim, dim, 1)
         self.proj = nn.Conv2d(dim, dim, 1)
         
@@ -42,7 +43,7 @@ class ConvMod(nn.Module):
         x = self.proj(x)
         return x
 
-class ATT_BK(nn.Module):
+class Block(nn.Module):
     def __init__(self, dim, mlp_ratio = 4, drop_path = 0):
         super().__init__()
       
@@ -52,9 +53,22 @@ class ATT_BK(nn.Module):
         self.layer_scale_1     = nn.Parameter(layer_scale_init_value * torch.ones((dim)), requires_grad=True)
         self.layer_scale_2     = nn.Parameter(layer_scale_init_value * torch.ones((dim)), requires_grad=True)
         self.drop_path         = DropPath(drop_path) if drop_path > 0. else nn.Identity()
+        self._random_init_weights()
+        
+    def _random_init_weights(self):
+        for m in self.modules():
+            if isinstance(m, nn.Conv2d):
+                nn.init.normal_(m.weight, std = 0.01)
+                if m.bias is not None:
+                    nn.init.constant_(m.bias, 0)
+            elif isinstance(m, nn.BatchNorm2d):
+                nn.init.constant_(m.weight, 1)
+                nn.init.constant_(m.bias,   0)   
 
     def forward(self, x):
         x = x + self.drop_path(self.layer_scale_1.unsqueeze(-1).unsqueeze(-1) * self.attn(x))
         x = x + self.drop_path(self.layer_scale_2.unsqueeze(-1).unsqueeze(-1) * self.mlp(x))
         return x
+
+
 

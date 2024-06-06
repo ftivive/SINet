@@ -1,12 +1,15 @@
 """
-Convolutional Shunting Inhibitory Neuron
+Created on Thu Jun 25 10:17:42 2020
 
+@author: Steve
 """
 import torch
 import torch.nn as nn
 from torch.nn import Parameter
 from scipy.ndimage.filters import gaussian_filter
 import numpy as np
+
+
 
 class SIConv2d(nn.Module):
     def __init__(self, in_channels, out_channels, num_kernel_size, den_kernel_size, stride=1, padding=0, dilation=1, groups = 1):
@@ -51,9 +54,13 @@ class SIConv2d(nn.Module):
         gaussian_2D              = torch.from_numpy(gaussian_2D).type(torch.float32)           
         self.den_fcn.weight.data = gaussian_2D.to(self.device)
 
-    # Define actual computations
+    # In[3]: Define actual computations
     def forward(self, input):
         # Shunting Inhibitory Neuron Computation
         return torch.div(self.num_fcn(input), self.act_fcn(self.den_fcn(input)) + self.bias_A_act_fcn(self.bias_A).unsqueeze(0).unsqueeze(2).unsqueeze(3)) 
 	
-
+if __name__ == '__main__':
+  conv   = SIConv2d(3, 5, 3, 3, 1, 1, 1)    
+  #conv   = SIConv2d(3, 3, 5, 1, 0, 1, use_biasB = False, use_biasC = False)   
+  input  = torch.randn(2, 3, 256, 256) #.cuda()
+  Out    = conv(input)
