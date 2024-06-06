@@ -9,7 +9,7 @@ We introduce a novel network architecture and processing unit, referred to as th
 ## Citation
 If you find this work or code is helpful for your research, please cite:
 ```
-@ARTICLE{9095329,
+@ARTICLE{,
   author={F. H. C. Tivive, A. Bouzerdoum, S. L. P., H. T. Le, and H. Baali},
   journal={}, 
   title={A deep learning-based method for crowd counting using shunting inhibition mechanism}, 
