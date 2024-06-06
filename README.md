@@ -5,6 +5,10 @@ We introduce a novel network architecture and processing unit, referred to as th
 
 
 
+## Visualization
+
+![Visualization](./assets/visualization.jpg)
+
 
 ## Citation
 If you find this work or code is helpful for your research, please cite:
