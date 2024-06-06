@@ -4,7 +4,7 @@ We introduce a novel network architecture and processing unit, referred to as th
 
 
 ![alt_text](./assets/model.png)
-**Fig. 1.** SINet architecture with different network components to estimate the crowd density map.
+**Fig. 1.** SINet architecture with different network components for crowd density map estimation.
 
 
 
