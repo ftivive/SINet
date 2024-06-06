@@ -3,7 +3,7 @@
 We introduce a novel network architecture and processing unit, referred to as the shunting inhibitory (SI) neuron, for crowd counting. The network consists of an encoder and two decoders, where the latter is characterized by a sequence of alternating convolutional and transformer layers. This design captures rich contextual information that is used for generating accurate segmentation and density maps. The SI neuron is more powerful than the traditional perceptron because it has the capability to generate more complex decision boundaries. 
 
 
-![alt_text](./assets/model.jpg)
+![alt_text](./assets/model.png)
 **Fig. 1.** SINet architecture with different network components to estimate the crowd density map.
 
 
@@ -17,7 +17,7 @@ We introduce a novel network architecture and processing unit, referred to as th
 
 
 ## Visualization
-![alt_text](./assets/visualization.jpg)
+![alt_text](./assets/visualization.png)
 
 ## Citation
 If you find this work or code is helpful for your research, please cite:
