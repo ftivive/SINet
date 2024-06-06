@@ -1,9 +1,20 @@
 # SINet
 ## Description
-We introduce a novel network architecture and processing unit, referred to as the shunting inhibitory neuron, for crowd counting. This architecture is structured into encoder and decoder modules, where the latter is characterized by a sequence of alternating convolutional and transformer layers. This design captures rich contextual information that is used for generating accurate segmentation and density maps. The shunting inhibitory neuron, which can generate complex decision boundaries, is more powerful than the traditional perceptron.
+We introduce a novel network architecture and processing unit, referred to as the shunting inhibitory (SI) neuron, for crowd counting. The network consists of an encoder and two decoders, where the latter is characterized by a sequence of alternating convolutional and transformer layers. This design captures rich contextual information that is used for generating accurate segmentation and density maps. The SI neuron is more powerful than the traditional perceptron because it has the capability to generate more complex decision boundaries. 
+
 
 ![alt_text](./assets/model.jpg)
 **Fig. 1.** SINet architecture with different network components to estimate the crowd density map.
+
+
+
+## Results on ShanghaiTech dataset
+
+| **Methods**         |       Part-A       |       Part-B       |
+| --------------------|---------|----------|---------|----------|
+|                     | **MAE** | **RMSE** |**MAE**  | **RMSE** |
+| SINet               |         | 376.0    |         |          |
+
 
 ## Visualization
 ![alt_text](./assets/visualization.jpg)
