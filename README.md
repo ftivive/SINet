@@ -11,9 +11,9 @@ We introduce a novel network architecture and processing unit, referred to as th
 ## Results on ShanghaiTech dataset
 
 | **Methods**         |    **Part-A**      |     **Part-B**     |
-| --------------------|---------|----------|---------|----------|
-|                     | **MAE** | **RMSE** | **MAE** | **RMSE** |
-| SINet               |         |          |         |          |
+| :---: | :---: | :---: | :---: | :---: |
+|      :---:          | **MAE** | **RMSE** | **MAE** | **RMSE** |
+| SINet               |   52.3   | 87.6   | 6.0   |  10.1      |
 
 
 ## Visualization
