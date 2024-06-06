@@ -1,10 +1,23 @@
 # SINet
 ## Description
-We introduce a novel network architecture and processing unit, referred to as the shunting inhibitory (SI) neuron, for crowd counting. The network consists of an encoder and two decoders, where the latter is characterized by a sequence of alternating convolutional and transformer layers. This design captures rich contextual information that is used for generating accurate segmentation and density maps. The SI neuron is more powerful than the traditional perceptron because it has the capability to generate more complex decision boundaries. 
+We present a new deep learning model for crowd counting and introduce a novel processing unit, known as the Shunting Inhibitory (SI) neuron. The architecture of this network comprises an encoder and dual decoders. Each decoder is characterized by a sequence of alternating convolutional and transformer layers. Both the encoder and the decoders are composed of layers of SI neurons and perceptrons, which are used to generate accurate segmentation and density maps. The adoption of SI neurons is based on their ability to form more complex nonlinear decision boundaries compared to traditional perceptrons. This unique feature enables us to design a compact yet highly effective network architecture.
 
 
 ![alt_text](./assets/model.png)
 **Fig. 1.** SINet architecture with different network components for crowd density map estimation.
+
+
+
+
+## Train and test
+1. To train a SINet network, run the following command:
+
+**Example 1:** `python train.py`
+
+2. To test a pretrained SINet network, run the following command:
+
+**Example 1:** `python test.py --input images/test_image.jpg --output images/test_image-output.jpg`
+
 
 
 
