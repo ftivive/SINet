@@ -39,8 +39,8 @@ class SIConv2d(nn.Module):
         torch.nn.init.xavier_uniform_(self.num_fcn.weight)   
         #        
         nn.init.uniform_(self.bias_A,      0.5, 1)   # bias A init
-        nn.init.uniform_(self.num_fcn.bias, -1, 1)   # bias B init
-        nn.init.uniform_(self.den_fcn.bias, -1, 1)   # bias C init
+        nn.init.normal_(self.num_fcn.bias, 0.01)   # bias B init
+        nn.init.normal_(self.den_fcn.bias, 0.01)   # bias C init
         #
         Sz                       = self.den_kernel_size
         in_ch                    = self.in_channels
