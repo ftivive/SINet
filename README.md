@@ -8,7 +8,7 @@ We present a new deep learning model for crowd counting and introduce a novel pr
 
 
 ## Installation
-1. Install 
+1. Install pytorch
 
 2. git clone https://github.com/ftivive/SINet/
 
