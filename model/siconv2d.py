@@ -59,8 +59,3 @@ class SIConv2d(nn.Module):
         # Shunting Inhibitory Neuron Computation
         return torch.div(self.num_fcn(input), self.act_fcn(self.den_fcn(input)) + self.bias_A_act_fcn(self.bias_A).unsqueeze(0).unsqueeze(2).unsqueeze(3)) 
 	
-if __name__ == '__main__':
-  conv   = SIConv2d(3, 5, 3, 3, 1, 1, 1)    
-  #conv   = SIConv2d(3, 3, 5, 1, 0, 1, use_biasB = False, use_biasC = False)   
-  input  = torch.randn(2, 3, 256, 256) #.cuda()
-  Out    = conv(input)

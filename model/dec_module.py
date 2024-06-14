@@ -57,7 +57,6 @@ class Decoder(nn.Module):
         self.up3 = Interpolate(4)
         self.up2 = Interpolate(2)
         #
-        self.init_weight()
 
 
     def forward(self, res, att_map):
@@ -87,10 +86,4 @@ class Decoder(nn.Module):
             #
             return torch.cat([x, x1, x2],1)
     
-    def init_weight(self):
-        for m in self.children():
-            if isinstance(m, nn.Conv2d):
-                nn.init.kaiming_normal_(m.weight, a=1)
-                if m.bias is not None:
-                    nn.init.constant_(m.bias, 0)
 
