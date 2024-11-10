@@ -48,7 +48,7 @@ A new deep learning model for crowd counting is introduced, featuring a novel pr
 If you find this work or code is helpful for your research, please cite:
 ```
 @ARTICLE{,
-  author={F. H. C. Tivive, A. Bouzerdoum, S. L. P., H. T. Le, and H. Baali},
+  author={F. H. C. Tivive, A. Bouzerdoum, S. L. Phung, H. T. Le, and H. Baali},
   journal={IEEE Transactions on Artificial Intelligence}, 
   title={A deep learning-based method for crowd counting using shunting inhibition mechanism}, 
   year={2024},
