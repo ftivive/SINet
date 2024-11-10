@@ -58,4 +58,4 @@ If you find this work or code is helpful for your research, please cite:
   doi={}}
   ```
 ## Reference
-F. H. C. Tivive, A. Bouzerdoum, S. L. Phung, H. T. Le, and H. Baali, ``A deep learning-based method for crowd counting using shunting inhibition mechanism,'' IEEE Transactions on Artificial Intelligence, Published on 14 Aug. 2024.
+F. H. C. Tivive, A. Bouzerdoum, S. L. Phung, H. T. Le, and H. Baali, "A deep learning-based method for crowd counting using shunting inhibition mechanism," IEEE Transactions on Artificial Intelligence, Published on 14 Aug. 2024.
