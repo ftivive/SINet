@@ -49,9 +49,9 @@ If you find this work or code is helpful for your research, please cite:
 ```
 @ARTICLE{,
   author={F. H. C. Tivive, A. Bouzerdoum, S. L. P., H. T. Le, and H. Baali},
-  journal={}, 
+  journal={IEEE Transactions on Artificial Intelligence}, 
   title={A deep learning-based method for crowd counting using shunting inhibition mechanism}, 
-  year={},
+  year={2024},
   volume={},
   number={},
   pages={},
